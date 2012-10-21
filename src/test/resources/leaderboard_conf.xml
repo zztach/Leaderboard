@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<leaderboard_configurations>
+
+    <leaderboard_configuration name="test1">
+        <description>
+            <![CDATA[This configuration instructs the application to gather top players from a single source located at<br>
+                     <b>http://leaderboard.zisist.cloudbees.net/api/players/leaders</b>.<br>
+                     It then makes use of the europeanServerAnalyzer to generate a list of the European Top Players<br>
+                     and sends an email with the list calculated in the previous step]]>
+        </description>
+        <leaderboards>
+            <leaderboard>
+                <input_uri>http://leaderboard.zisist.cloudbees.net/api/players/leaders</input_uri>
+                <input_analyzer>europeanServerAnalyzer</input_analyzer>
+            </leaderboard>
+        </leaderboards>
+        <merger>topPointsPlayersMerger</merger>
+        <publisher>emailPublisher</publisher>
+    </leaderboard_configuration>
+
+    <leaderboard_configuration name="test2">
+        <description>
+            <![CDATA[This configuration instructs the application to gather top players from a 2 sources located at<br>
+            <b>1. http://leaderboard.zisist.cloudbees.net/api/players/leaders<br>
+               2. Local text file called leaders.txt</b><br>
+            It makes use of the europeanServerAnalyzer to generate a list of the Europe's Top Players<br>
+            It makes use of the americanServerAnalyzer to generate a list of the America's Top Players<br>
+            It merges the 2 lists and sends an email with the merged list calculated in the previous step]]>
+        </description>
+        <leaderboards>
+            <leaderboard>
+                <input_uri>leaders.txt</input_uri>
+                <input_analyzer>americanServerAnalyzer</input_analyzer>
+            </leaderboard>
+            <leaderboard>
+                <input_uri>http://leaderboard.zisist.cloudbees.net/api/players/leaders</input_uri>
+                <input_analyzer>europeanServerAnalyzer</input_analyzer>
+            </leaderboard>
+        </leaderboards>
+        <merger>topPointsPlayersMerger</merger>
+        <publisher>twitterPublisher</publisher>
+    </leaderboard_configuration>
+</leaderboard_configurations>

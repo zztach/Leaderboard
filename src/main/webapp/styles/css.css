@@ -1,0 +1,27 @@
+.color{
+    background-color: #f4f4f4;
+}
+
+a:link, a:visited
+{ background-color: inherit;
+  color: #005FA9;
+  font-size: small;
+  text-decoration: none; }
+
+a:hover
+{ text-decoration: underline; }
+
+html, body {
+    height: 100%;
+    font-family: Calibri, Regular;
+    font-size: 12px;
+    font-weight: normal;
+    color: #333333;
+    text-decoration: none;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    background-color: #EAEAEC;
+
+}

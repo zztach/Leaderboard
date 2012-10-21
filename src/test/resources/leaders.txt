@@ -1,0 +1,3 @@
+KATERINA    220     1000    GR
+AVRAAM      345     1200    FR
+VASILIS     120      400    GB

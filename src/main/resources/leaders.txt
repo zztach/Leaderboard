@@ -1,0 +1,3 @@
+JOHN        220     500     US-NY
+AVRAAM      345     800     US-TN
+VASILIS     120     200     US-UT
