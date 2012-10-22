@@ -3,6 +3,8 @@ package org.zisist.model;
 import java.util.Comparator;
 
 /**
+ * Comparator that sorts a collection of TopPlayer objects in descending order based on the <br>
+ * player's points
  * Created by zis.tax@gmail.com on 08/10/2012 at 2:58 AM
  */
 public class TopPlayerComparatorByPoints implements Comparator<TopPlayer> {
