@@ -69,10 +69,10 @@ public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
             
             // read from source and generate meaningful representation of data
             InputAnalyzer analyzer = inputAnalyzersMap.get(board.getInputAnalyzer());
-            List<TopPlayer> europeTopPlayers = analyzer.getTopPlayersFromInputSource(inputStream);
+            List<TopPlayer> topPlayers = analyzer.getTopPlayersFromInputSource(inputStream);
             log.info(String.format("Analyzed input using analyzer %s", board.getInputAnalyzer()));
 
-            topPlayersPerRegion.put(board.getInputAnalyzer(), europeTopPlayers);
+            topPlayersPerRegion.put(board.getInputAnalyzer(), topPlayers);
         }
 
         // handle the data from all sources
