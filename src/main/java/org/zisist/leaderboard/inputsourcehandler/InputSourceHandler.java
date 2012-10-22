@@ -13,6 +13,6 @@ public interface InputSourceHandler {
      * 
      * @param sourceLocation the uri describing the location of the input source
      * @return an input stream for the <i>sourceLocation</i>
-     * /
+     */
     InputStream openStream(String sourceLocation);
 }
