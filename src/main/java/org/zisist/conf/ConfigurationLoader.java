@@ -14,12 +14,12 @@ public interface ConfigurationLoader {
      * Loads the configuration by name
      * @param name the distinct name of the configuration
      * @return a LeaderboardConfiguration object holding the configuration
-     * /
+     */
     LeaderboardConfiguration getConfiguration(String name);
     
     /**
      * Loads all available configurations     
      * @return a List of all available LeaderboardConfiguration objects
-     * /
+     */
     List<LeaderboardConfiguration> getAvailableConfigurations();
 }
