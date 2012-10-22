@@ -10,6 +10,7 @@
     <link rel="STYLESHEET" type="text/css" href="styles/css.css">
 </head>
 <f:view>
+    <f:loadBundle basename="messages" var="translationBundle"/>
     <body>
     <a4j:keepAlive beanName="confBean"/>
     <h:form>
