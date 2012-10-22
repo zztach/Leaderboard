@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by zisis@gmail.com on 17/10/2012 at 1:07 AM
+ * Created by zis.tax@gmail.com on 17/10/2012 at 1:07 AM
  */
 public class TopPointsPlayerMergerTest {
     private TopPointsPlayersMerger topPointsPlayersMerger;

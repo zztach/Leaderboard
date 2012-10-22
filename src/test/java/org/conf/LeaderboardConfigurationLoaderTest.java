@@ -12,7 +12,7 @@ import org.zisist.model.xml.LeaderboardConfiguration;
 import java.util.List;
 
 /**
- * Created by zisis@gmail.com on 17/10/2012 at 12:39 AM
+ * Created by zis.tax@gmail.com on 17/10/2012 at 12:39 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})

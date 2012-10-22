@@ -8,7 +8,7 @@ import org.zisist.leaderboard.inputsourcehandler.impl.FileInputSourceHandler;
 import java.io.InputStream;
 
 /**
- * Created by zisis@gmail.com on 17/10/2012 at 12:57 AM
+ * Created by zis.tax@gmail.com on 17/10/2012 at 12:57 AM
  */
 public class FileInputSourceHandlerTest {
     private FileInputSourceHandler fileInputSourceHandler;
@@ -26,13 +26,13 @@ public class FileInputSourceHandlerTest {
 
    @Test(expected = IllegalArgumentException.class)
     public void testNonExistingFileOpenFail() {
-        InputStream inStream = fileInputSourceHandler.openStream("no_such_file.txt");
+        fileInputSourceHandler.openStream("no_such_file.txt");
         Assert.fail("File does not exist!!!");
     }
 
    @Test(expected = IllegalArgumentException.class)
     public void testNonExistingFileAbsolutePathOpenFail() {
-        InputStream inStream = fileInputSourceHandler.openStream("/no_such_file.txt");
+        fileInputSourceHandler.openStream("/no_such_file.txt");
         Assert.fail("File does not exist!!!");
     }
 }

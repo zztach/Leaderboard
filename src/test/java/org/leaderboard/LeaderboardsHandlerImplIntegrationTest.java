@@ -11,7 +11,7 @@ import org.zisist.leaderboard.LeaderboardsHandlerImpl;
 import org.zisist.model.Configuration;
 
 /**
- * Created by zisis@gmail.com on 17/10/2012 at 12:51 AM
+ * Created by zis.tax@gmail.com on 17/10/2012 at 12:51 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})

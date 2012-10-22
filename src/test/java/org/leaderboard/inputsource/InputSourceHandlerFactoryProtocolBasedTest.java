@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by zisis@gmail.com on 17/10/2012 at 12:17 AM
+ * Created by zis.tax@gmail.com on 17/10/2012 at 12:17 AM
  */
 public class InputSourceHandlerFactoryProtocolBasedTest {
 
@@ -42,13 +42,13 @@ public class InputSourceHandlerFactoryProtocolBasedTest {
     
     @Test(expected = UnsupportedOperationException.class)
     public void testHttpsProtocolHandler() {
-        InputSourceHandler inputSourceHandler = inputSourceHandlerFactory.getInputSourceHandler("https://google.com");
+        inputSourceHandlerFactory.getInputSourceHandler("https://google.com");
         Assert.fail("Method should have thrown an UnsupportedOperationException");
     }
     
     @Test(expected = UnsupportedOperationException.class)
     public void testFtpProtocolHandler() {
-        InputSourceHandler inputSourceHandler = inputSourceHandlerFactory.getInputSourceHandler("ftp://server.gr/pub");
+        inputSourceHandlerFactory.getInputSourceHandler("ftp://server.gr/pub");
         Assert.fail("Method should have thrown an UnsupportedOperationException");
     }
 }

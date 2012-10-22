@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by zisis@gmail.com on 21/10/2012 at 7:21 PM
+ * Created by zis.tax@gmail.com on 21/10/2012 at 7:21 PM
  */
 public class LeaderboardHandlerMockTest {
     // service under test
