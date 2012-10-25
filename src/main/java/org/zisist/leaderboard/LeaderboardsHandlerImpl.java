@@ -72,7 +72,7 @@ public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
             List<TopPlayer> topPlayers = analyzer.getTopPlayersFromInputSource(inputStream);
             log.info(String.format("Analyzed input using analyzer %s", board.getInputAnalyzer()));
 
-            topPlayersPerRegion.put(board.getInputAnalyzer(), topPlayers);
+            topPlayersPerRegion.put(board.getInputAnalyzer() + "_" + board.getInputUri().hashCode(), topPlayers);
         }
 
         // handle the data from all sources
