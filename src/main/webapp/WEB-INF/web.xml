@@ -82,7 +82,8 @@
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>faces-config.xml</param-value>
     </context-param>
+
     <welcome-file-list>
-        <welcome-file>index.faces</welcome-file>
+        <welcome-file>start.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

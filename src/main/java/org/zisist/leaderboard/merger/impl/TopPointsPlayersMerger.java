@@ -25,6 +25,7 @@ public class TopPointsPlayersMerger implements Merger<TopPlayer> {
             finalList.addAll(topPlayerList);
         }
         Collections.sort(finalList, new TopPlayerComparatorByPoints());
-        return finalList;
+
+        return finalList.subList(0,Math.min(10, finalList.size()));
     }
 }

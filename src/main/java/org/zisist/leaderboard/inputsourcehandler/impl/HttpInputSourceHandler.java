@@ -35,8 +35,7 @@ public class HttpInputSourceHandler implements InputSourceHandler {
                 log.info(String.format("Reading from URL : %s ", sourceLocation));
             }
 
-            byte[] responseBody = method.getResponseBody();
-            return new ByteArrayInputStream(responseBody);
+            return method.getResponseBodyAsStream();
         } catch (IOException e) {
             throw new IllegalStateException(String.format("Could not open stream to http location %s!", sourceLocation), e);
         }
