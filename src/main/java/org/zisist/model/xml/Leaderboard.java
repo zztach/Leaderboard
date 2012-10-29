@@ -44,6 +44,13 @@ public class Leaderboard {
     @XmlElement(name = "input_analyzer", required = true)
     protected String inputAnalyzer;
 
+    public Leaderboard() {}
+
+    public Leaderboard(String inputAnalyzer, String inputURI) {
+        this.inputAnalyzer = inputAnalyzer;
+        this.inputUri = inputURI;
+    }
+
     /**
      * Gets the value of the inputUri property.
      * 

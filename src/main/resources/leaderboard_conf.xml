@@ -68,4 +68,31 @@
         <merger>topPointsPlayersMerger</merger>
         <publisher>emailPublisher</publisher>
     </leaderboard_configuration>
+
+    <leaderboard_configuration name="multiThreadSupportConfiguration">
+        <description>
+            <![CDATA[This configuration demonstrates the difference between a single vs multi threaded implementation of the algorithm.<br>
+                     The following 5 data sources are read<br>
+                     1. http://leaderboard-2.site50.net/leaders-2<br>
+                     2. http://leaderboard.zisist.cloudbees.net/leaders_250000_usa_1.txt<br>
+                     3. http://leaderboard.net63.net/leaders<br>
+            ]]>
+        </description>
+        <leaderboards>
+            <leaderboard>
+                <input_uri>http://leaderboard-2.site50.net/leaders-2</input_uri>
+                <input_analyzer>americanServerAnalyzer</input_analyzer>
+            </leaderboard>
+            <leaderboard>
+                <input_uri>http://leaderboard.zisist.cloudbees.net/leaders_250000_usa_1.txt</input_uri>
+                <input_analyzer>americanServerAnalyzer</input_analyzer>
+            </leaderboard>
+            <leaderboard>
+                <input_uri>http://leaderboard.net63.net/leaders</input_uri>
+                <input_analyzer>americanServerAnalyzer</input_analyzer>
+            </leaderboard>
+        </leaderboards>
+        <merger>topPointsPlayersMerger</merger>
+        <publisher>emailPublisher</publisher>
+    </leaderboard_configuration>
 </leaderboard_configurations>

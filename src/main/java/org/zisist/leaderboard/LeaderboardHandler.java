@@ -5,7 +5,7 @@ import org.zisist.model.Configuration;
 /**
  * Created by zis.tax@gmail.com on 04/10/2012 at 12:31 AM
  */
-public interface LeaderboardsHandler {
+public interface LeaderboardHandler {
     /**
      * This is the heart of the application. It defines the algorithm used to produce the results<br><br>
      *

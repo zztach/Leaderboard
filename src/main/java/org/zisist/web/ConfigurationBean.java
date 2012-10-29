@@ -1,10 +1,13 @@
 package org.zisist.web;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StopWatch;
+import org.zisist.SpringApplicationContext;
 import org.zisist.conf.ConfigurationLoader;
-import org.zisist.leaderboard.LeaderboardsHandler;
+import org.zisist.leaderboard.LeaderboardHandler;
 import org.zisist.model.Configuration;
 import org.zisist.model.xml.LeaderboardConfiguration;
+import org.zisist.utils.WebKeys;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -20,9 +23,10 @@ public class ConfigurationBean {
     private String email;
     private String configurationName;
     private String description;
-    private LeaderboardsHandler leaderboardsHandler;
+    private LeaderboardHandler leaderboardsHandler;
     private ConfigurationLoader leaderConfigurationLoader;
     private LeaderboardConfiguration selectedLeaderboardConf;
+    private Boolean multithreaded;
 
     public ConfigurationBean() {
         configurationName = "";
@@ -48,24 +52,30 @@ public class ConfigurationBean {
     public Object execute() {
         Configuration configuration = new Configuration(configurationName, email);
         try {
+            String leaderboardHandlerName = (multithreaded != null && multithreaded) ? WebKeys.LEADERBOARD_HANDLER_MULTITHREAD : WebKeys.LEADERBOARD_HANDLER_SINGLETHREAD;
+            leaderboardsHandler = SpringApplicationContext.getBean(leaderboardHandlerName, LeaderboardHandler.class);
+            StopWatch watch = new StopWatch();
+            watch.start();
             leaderboardsHandler.handleLeaderboards(configuration);
+            watch.stop();
             log.info("Results unified successfully!");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Action completed Successfully","Action completed Successfully"));
+                    "Action completed Successfully.Execution Time : " + watch.getTotalTimeSeconds()+ " sec!",
+                    "Action completed Successfully.Execution Time : " + watch.getTotalTimeSeconds()+ " sec!"));
         } catch (Exception e) {
             log.error("Something went wrong during results unification!", e);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error occurred","An error occurred"));
+                    "An error occurred! Details : " + e.getMessage(), "An error occurred! Details : " + e.getMessage()));
         }
 
         return null;
     }
 
-    public LeaderboardsHandler getLeaderboardsHandler() {
+    public LeaderboardHandler getLeaderboardsHandler() {
         return leaderboardsHandler;
     }
 
-    public void setLeaderboardsHandler(LeaderboardsHandler leaderboardsHandler) {
+    public void setLeaderboardsHandler(LeaderboardHandler leaderboardsHandler) {
         this.leaderboardsHandler = leaderboardsHandler;
     }
 
@@ -104,5 +114,13 @@ public class ConfigurationBean {
 
     public void setSelectedLeaderboardConf(LeaderboardConfiguration selectedLeaderboardConf) {
         this.selectedLeaderboardConf = selectedLeaderboardConf;
+    }
+
+    public Boolean getMultithreaded() {
+        return multithreaded;
+    }
+
+    public void setMultithreaded(Boolean multithreaded) {
+        this.multithreaded = multithreaded;
     }
 }

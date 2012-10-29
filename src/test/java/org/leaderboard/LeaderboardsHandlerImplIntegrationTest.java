@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.zisist.leaderboard.LeaderboardsHandlerImpl;
+import org.zisist.leaderboard.impl.SingleThreadLeaderboardHandler;
 import org.zisist.model.Configuration;
 
 /**
@@ -19,7 +19,7 @@ import org.zisist.model.Configuration;
 public class LeaderboardsHandlerImplIntegrationTest {
 
     @Autowired
-    private LeaderboardsHandlerImpl leaderboardsHandler;
+    private SingleThreadLeaderboardHandler leaderboardsHandler;
     private Configuration configuration;
 
     @Before

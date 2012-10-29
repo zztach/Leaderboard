@@ -1,9 +1,12 @@
-package org.zisist.leaderboard;
+package org.zisist.leaderboard.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 import org.zisist.conf.ConfigurationLoader;
+import org.zisist.leaderboard.LeaderboardHandler;
+import org.zisist.leaderboard.LeaderboardKeyHandler;
 import org.zisist.leaderboard.inputanalyzer.InputAnalyzer;
 import org.zisist.leaderboard.inputsourcehandler.InputSourceHandler;
 import org.zisist.leaderboard.inputsourcehandler.InputSourceHandlerFactory;
@@ -22,10 +25,10 @@ import java.util.Map;
 /**
  * Created by zis.tax@gmail.com on 04/10/2012 at 12:31 AM
  */
-@Service("leaderboardsHandler")
+@Service("singleThreadLeaderboardHandler")
 @SuppressWarnings("unchecked")
-public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
-    private static Logger log = Logger.getLogger(LeaderboardsHandlerImpl.class);
+public final class SingleThreadLeaderboardHandler implements LeaderboardHandler {
+    private static Logger log = Logger.getLogger(SingleThreadLeaderboardHandler.class);
 
     @Autowired
     private ConfigurationLoader configurationLoader;
@@ -37,6 +40,8 @@ public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
     private Map<String,Merger<TopPlayer>> mergerMap;
     @Autowired
     private InputSourceHandlerFactory inputSourceHandlerFactory;
+    @Autowired
+    private LeaderboardKeyHandler leaderboardKeyHandler;
 
     public void setConfigurationLoader(ConfigurationLoader configurationLoader) {
         this.configurationLoader = configurationLoader;
@@ -53,13 +58,19 @@ public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
     public void setInputSourceHandlerFactory(InputSourceHandlerFactory inputSourceHandlerFactory) {
         this.inputSourceHandlerFactory = inputSourceHandlerFactory;
     }
+    public void setLeaderboardKeyHandler(LeaderboardKeyHandler leaderboardKeyHandler) {
+        this.leaderboardKeyHandler = leaderboardKeyHandler;
+    }
 
     @Override
     public final void handleLeaderboards(Configuration configuration) {
+        StopWatch watch = new StopWatch();
+        watch.start();
         LeaderboardConfiguration leaderboardConfiguration = configurationLoader.getConfiguration(configuration.getConfigurationName());
         log.info(String.format("Loaded configuration %s...", leaderboardConfiguration.getName()));
         Map<String, List<TopPlayer>> topPlayersPerRegion = new HashMap<String, List<TopPlayer>>();
 
+        long numOfTopPlayersProcessed = 0;
         for (Leaderboard board : leaderboardConfiguration.getLeaderboards().getLeaderboard()) {
             // open stream to source
             String inputSourceURI = board.getInputUri();
@@ -69,11 +80,19 @@ public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
             
             // read from source and generate meaningful representation of data
             InputAnalyzer analyzer = inputAnalyzersMap.get(board.getInputAnalyzer());
-            List<TopPlayer> topPlayers = analyzer.getTopPlayersFromInputSource(inputStream);
-            log.info(String.format("Analyzed input using analyzer %s", board.getInputAnalyzer()));
-
-            topPlayersPerRegion.put(board.getInputAnalyzer() + "_" + board.getInputUri().hashCode(), topPlayers);
+            analyzer.configure(inputStream, board);
+            try {
+                List<TopPlayer> topPlayers = analyzer.call();
+                topPlayersPerRegion.put(leaderboardKeyHandler.encodeKey(board), topPlayers);
+                numOfTopPlayersProcessed += topPlayers.size();
+            } catch (Exception e) {
+                throw new RuntimeException("Failure during data analysis from input source " + inputSourceURI + " using analyzer " + board.getInputAnalyzer(), e);
+            }
         }
+
+        watch.stop();
+
+        log.info(String.format("Accumulated total %s Top players from %s different sources in %s seconds", numOfTopPlayersProcessed, leaderboardConfiguration.getLeaderboards().getLeaderboard().size(), watch.getTotalTimeSeconds()));
 
         // handle the data from all sources
         Merger merger = mergerMap.get(leaderboardConfiguration.getMerger());
@@ -83,6 +102,7 @@ public final class LeaderboardsHandlerImpl implements LeaderboardsHandler {
         // publish the final results
         Publisher publisher = publishersMap.get(leaderboardConfiguration.getPublisher());
         publisher.publish(finalList, configuration);
+        finalList.clear();
         log.info(String.format("Published results using publisher %s", leaderboardConfiguration.getPublisher()));
     }
 }

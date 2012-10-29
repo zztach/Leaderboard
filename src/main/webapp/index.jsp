@@ -13,6 +13,7 @@
     <f:loadBundle basename="messages" var="translationBundle"/>
     <body>
     <a4j:keepAlive beanName="confBean"/>
+    <a4j:status id="ajaxStatus1" onstart="#{rich:component('pleaseWaitPanel')}.show();" onstop="#{rich:component('pleaseWaitPanel')}.hide();" />
     <h:form>
         <h:panelGrid id="mergerPanel" columns="1" style="margin-left:1%;" cellspacing="5">
             <%--    Configuration drop-down menu    --%>
@@ -65,15 +66,15 @@
                 </h:panelGroup>
             </h:panelGroup>
 
+            <h:panelGroup>
+                <h:panelGroup rendered="#{confBean.configurationName eq 'multiThreadSupportConfiguration'}">
+                    <h:selectBooleanCheckbox id="checkbox" value="#{confBean.multithreaded}" title="click it to select or deselect"/>
+                    <h:outputText value="Multithreaded Execution"/>
+                </h:panelGroup>
+            </h:panelGroup>
             <%--    Execute algorithm steps    --%>
-            <h:panelGrid columns="2">
+            <h:panelGrid columns="1">
                 <a4j:commandButton id="publishResults" process="emailPanel" value="Publish" action="#{confBean.execute}" reRender="mergerPanel"/>
-                <a4j:status>
-                    <f:facet name="start">
-                        <h:graphicImage value="images/ajax-loader-Big-snake.gif" height="18" width="18"
-                                        style="vertical-align:middle;"/>
-                    </f:facet>
-                </a4j:status>
                 <rich:messages globalOnly="true" id="generalMessages">
                     <f:facet name="errorMarker">
                         <h:graphicImage value="/images/button_drop.png"/>
@@ -86,5 +87,10 @@
         </h:panelGrid>
     </h:form>
     </body>
+    <rich:modalPanel id="pleaseWaitPanel" height="80" autosized="true" zindex="2001"
+                     style="background-color:transparent;margin-left: auto;margin-right: auto;border:none;"
+                     shadowOpacity="0">
+        <h:graphicImage value="/images/ajax-loader-Big-snake.gif"/>
+    </rich:modalPanel>
 </f:view>
 </html>

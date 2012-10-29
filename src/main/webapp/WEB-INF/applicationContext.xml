@@ -28,7 +28,7 @@
         </property>
     </bean>
 
-    <bean id="xmlConverter" class="org.zisist.conf.XMLConverter">
+    <bean id="xmlConverter" class="org.zisist.utils.XMLConverter">
         <property name="marshaller" ref="jaxb2Marshaller"/>
         <property name="unmarshaller" ref="jaxb2Marshaller"/>
     </bean>

@@ -3,7 +3,7 @@ package org.zisist.conf.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zisist.conf.ConfigurationLoader;
-import org.zisist.conf.XMLConverter;
+import org.zisist.utils.XMLConverter;
 import org.zisist.model.xml.LeaderboardConfiguration;
 import org.zisist.model.xml.LeaderboardConfigurations;
 

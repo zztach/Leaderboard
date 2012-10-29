@@ -4,7 +4,9 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.zisist.conf.ConfigurationLoader;
-import org.zisist.leaderboard.LeaderboardsHandlerImpl;
+import org.zisist.leaderboard.impl.DefaultLeaderboardKeyHandler;
+import org.zisist.leaderboard.LeaderboardKeyHandler;
+import org.zisist.leaderboard.impl.SingleThreadLeaderboardHandler;
 import org.zisist.leaderboard.inputanalyzer.InputAnalyzer;
 import org.zisist.leaderboard.inputanalyzer.impl.EuropeanServerAnalyzer;
 import org.zisist.leaderboard.inputsourcehandler.InputSourceHandler;
@@ -32,7 +34,7 @@ import java.util.Map;
  */
 public class LeaderboardHandlerMockTest {
     // service under test
-    private LeaderboardsHandlerImpl leaderboardsHandler;
+    private SingleThreadLeaderboardHandler leaderboardsHandler;
 
     // Mock services
     private ConfigurationLoader configurationLoaderMock;
@@ -43,17 +45,19 @@ public class LeaderboardHandlerMockTest {
     private Map<String, Merger<TopPlayer>> mergerMapMock = new HashMap<String, Merger<TopPlayer>>();
     private EmailPublisher emailPublisherMock;
     private Map<String, Publisher> publishersMapMock = new HashMap<String, Publisher>();
+    private LeaderboardKeyHandler leaderboardKeyHandler = new DefaultLeaderboardKeyHandler();
 
     // helper objects
     private Configuration configuration;
     private InputSourceHandler inputSourceHandlerMock;
 
 
+
     @Before
     public void init() {
         inputSourceHandlerMock = EasyMock.createMock(FileInputSourceHandler.class);
         configurationLoaderMock = EasyMock.createMock(ConfigurationLoader.class);
-        inputAnalyzerMock = EasyMock.createMock(EuropeanServerAnalyzer.class);        
+        inputAnalyzerMock = EasyMock.createMock(EuropeanServerAnalyzer.class);
         inputAnalyzersMapMock.put("europeanServerAnalyzer", inputAnalyzerMock);
         inputSourceHandlerFactoryMock = EasyMock.createMock(InputSourceHandlerFactory.class);
         topPlayerMergerMock = EasyMock.createMock(TopPointsPlayersMerger.class);
@@ -61,13 +65,14 @@ public class LeaderboardHandlerMockTest {
         emailPublisherMock = EasyMock.createMock(EmailPublisher.class);
         publishersMapMock.put("emailPublisher", emailPublisherMock);
         
-        leaderboardsHandler = new LeaderboardsHandlerImpl();
+        leaderboardsHandler = new SingleThreadLeaderboardHandler();
         
         leaderboardsHandler.setConfigurationLoader(configurationLoaderMock);
         leaderboardsHandler.setInputAnalyzersMap(inputAnalyzersMapMock);
         leaderboardsHandler.setInputSourceHandlerFactory(inputSourceHandlerFactoryMock);
         leaderboardsHandler.setMergerMap(mergerMapMock);
         leaderboardsHandler.setPublishersMap(publishersMapMock);
+        leaderboardsHandler.setLeaderboardKeyHandler(leaderboardKeyHandler);
 
         // helper objects
         configuration = new Configuration("test1", "leaderboard.zt@gmail.com");
@@ -98,7 +103,7 @@ public class LeaderboardHandlerMockTest {
         topPlayersList.add(new TopPlayer("JOHN", 100, 10, "GR"));
         topPlayersList.add(new TopPlayer("TIM", 200, 15, "NE"));
         Map<String, List<TopPlayer>> topPlayersMap = new HashMap<String, List<TopPlayer>>();
-        topPlayersMap.put("europeanServerAnalyzer", topPlayersList);
+        topPlayersMap.put("europeanServerAnalyzer" + "_:_" + INPUT_URI, topPlayersList);
 
         // setup ordered list of players, the expected result of the merger
         List<TopPlayer> orderedTopPlayers = new ArrayList<TopPlayer>();
@@ -108,7 +113,9 @@ public class LeaderboardHandlerMockTest {
         EasyMock.expect(configurationLoaderMock.getConfiguration("test1")).andReturn(leaderboardConfiguration);
         EasyMock.expect(inputSourceHandlerFactoryMock.getInputSourceHandler(INPUT_URI)).andReturn(inputSourceHandlerMock);
         EasyMock.expect(inputSourceHandlerMock.openStream(INPUT_URI)).andReturn(inputStream);
-        EasyMock.expect(inputAnalyzerMock.getTopPlayersFromInputSource(inputStream)).andReturn(topPlayersList);        
+        inputAnalyzerMock.configure(inputStream, leaderboard);
+        EasyMock.expectLastCall();
+        EasyMock.expect(inputAnalyzerMock.call()).andReturn(topPlayersList);
         EasyMock.expect(topPlayerMergerMock.merge(topPlayersMap)).andReturn(orderedTopPlayers);
         emailPublisherMock.publish(orderedTopPlayers, configuration);
         EasyMock.expectLastCall();

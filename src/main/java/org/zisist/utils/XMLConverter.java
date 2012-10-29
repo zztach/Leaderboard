@@ -1,4 +1,4 @@
-package org.zisist.conf;
+package org.zisist.utils;
 
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;

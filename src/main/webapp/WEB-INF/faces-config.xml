@@ -9,10 +9,6 @@
         <managed-bean-class>org.zisist.web.ConfigurationBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
         <managed-property>
-            <property-name>leaderboardsHandler</property-name>
-            <value>#{leaderboardsHandler}</value>
-        </managed-property>
-        <managed-property>
             <property-name>leaderConfigurationLoader</property-name>
             <value>#{leaderboardConfigurationLoader}</value>
         </managed-property>
