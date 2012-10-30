@@ -55,8 +55,7 @@ public final class MultiThreadedLeaderboardHandler implements LeaderboardHandler
         watch.start();
 
         LeaderboardConfiguration leaderboardConfiguration = configurationLoader.getConfiguration(configuration.getConfigurationName());
-
-        final int NUM_OF_THREADS = Math.min(Runtime.getRuntime().availableProcessors(), leaderboardConfiguration.getLeaderboards().getLeaderboard().size());
+        int NUM_OF_THREADS = Math.min(Math.max(2, Runtime.getRuntime().availableProcessors()), leaderboardConfiguration.getLeaderboards().getLeaderboard().size());
         ExecutorService executorService = Executors.newFixedThreadPool(NUM_OF_THREADS);
         log.info(String.format("Using %s threads to gather results...", NUM_OF_THREADS));
         Map<String, Future<List<TopPlayer>>> futureMap = new HashMap<String, Future<List<TopPlayer>>>();
